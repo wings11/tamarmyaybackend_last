@@ -25,6 +25,25 @@ router.post('/', async (req, res) => {
   }
 });
 
+router.put('/:id', async (req, res) => {
+  try {
+    const { buildingName } = req.body;
+    const location = await Location.findByPk(req.params.id);
+
+    if (!location) {
+      return res.status(404).json({ error: 'Location not found' });
+    }
+
+    location.buildingName = buildingName;
+    await location.save();
+
+    res.json(location);
+  } catch (error) {
+    console.error('Error updating location:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Delete location
 router.delete('/:id', async (req, res) => {
   try {
